@@ -76,5 +76,6 @@ Example:
     $('object').animateSprite('restart')        starts the animation from the beginning
     $('object').animateSprite('frame', n)       displays the frame number 'n'
     $('object').animateSprite('fps', n)         changes the speed of the animation to 'n' frames per second
+    $('object').animateSprite('loop', boolean)  changes the loop setting to the specified value (alternatively, call without a bool to toggle the setting)
 
 ```

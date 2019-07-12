@@ -43,8 +43,8 @@
                         var checkLoop = function (currentFrame, finalFrame) {
                             currentFrame++;
                             if (currentFrame >= finalFrame) {
+                                currentFrame = 0;
                                 if (this.settings.loop === true) {
-                                    currentFrame = 0;
                                     data.controlTimer();
                                 } else {
                                     this.settings.complete();
@@ -151,7 +151,7 @@
             var $this = $(this),
                 data  = $this.data('animateSprite');
 
-            // always st'op animation to prevent overlapping intervals
+            // always stop animation to prevent overlapping intervals
             $this.animateSprite('stopAnimation');
             data.controlTimer();
         });
@@ -174,19 +174,15 @@
             var $this = $(this),
                 data  = $this.data('animateSprite');
 
-            if (typeof animationName === 'string') {
+            $this.animateSprite('stopAnimation');
+            data.currentFrame = 0;
 
-                $this.animateSprite('stopAnimation');
-                if (data.settings.animations[animationName] !== data.currentAnimation) {
-                    data.currentFrame = 0;
-                    data.currentAnimation = data.settings.animations[animationName];
-                }
-                data.controlTimer();
-            } else {
-                $this.animateSprite('stopAnimation');
-                data.controlTimer();
+            if (typeof animationName === 'string'
+                && data.settings.animations[animationName] !== data.currentAnimation) {
+                data.currentAnimation = data.settings.animations[animationName];
             }
 
+            data.controlTimer();
         });
     };
 
@@ -199,6 +195,19 @@
         });
     };
 
+    var loop = function(val) {
+        return this.each(function () {
+            var $this = $(this),
+                data  = $this.data('animateSprite');
+            
+            if (typeof val === 'boolean'){
+                data.settings.loop = val;
+            } else {
+                data.settings.loop = !data.settings.loop;
+            }
+        });
+    }
+
     var methods = {
         init: init,
         frame: frame,
@@ -209,7 +218,8 @@
         stopAnimation: stop,
         resumeAnimation: resume,
         restartAnimation: restart,
-        fps: fps
+        fps: fps,
+        loop: loop
     };
 
     $.fn.animateSprite = function (method) {

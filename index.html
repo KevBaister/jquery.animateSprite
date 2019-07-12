@@ -20,13 +20,17 @@
         <button id="restart">Restart</button>
         <button id="changeFPS">Change FPS</button>
         <button id="remove">Remove DOM</button>
+        <button id="toggle">Toggle</button>
 
         <script src="bower_components/jquery/jquery.js"></script>
         <script src="scripts/jquery.animateSprite.js"></script>
 
         <script>
 /* global $ */
-var currentFps = 12;
+var currentFps = 12,
+    currentAnimation = null,
+    toggling = false;
+
 var animationSettings = {
     fps: currentFps,
     loop: false,
@@ -40,6 +44,10 @@ var animationSettings = {
         // there is no loop and the
         // animation finishes
         console.log('animation End');
+
+        if (toggling){
+            toggleAnimation();
+        }
     }
 };
 
@@ -70,11 +78,19 @@ var goRight = function(){
 var play = function(){
     $('.animation').animateSprite('play');
 }
+
+var toggleAnimation = function(){
+    currentAnimation = currentAnimation === 'walkLeft' ? 'walkRight' : 'walkLeft';
+    //if (currentAnimation === 'walkRight') $('.animation').animateSprite('loop');
+    $('.animation').animateSprite('play', currentAnimation);
+}
+
 $('#play').on('click', play);
 $('#left').on('click', goLeft);
 $('#right').on('click', goRight);
 $('#stop').on('click', function(){
     $('.animation').animateSprite('stop');
+    toggling = false;
 });
 $('#resume').on('click', function(){
     $('.animation').animateSprite('resume');
@@ -91,6 +107,18 @@ $('#changeFPS').on('click', function(){
 
 $('#remove').on('click', function(){
     $('.animation').remove();
+});
+
+$('#toggle').on('click', function(){
+    $('.animation').animateSprite('stop');
+
+    toggling = !toggling;
+
+    if (toggling === true){
+        currentAnimation = 'walkLeft';
+        $('.animation').animateSprite('play', currentAnimation);
+    }
+    
 });
 
 $('body').on('keydown', function(ev){
