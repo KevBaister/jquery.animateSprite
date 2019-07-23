@@ -1,6 +1,7 @@
-/*! jqueryanimatesprite - v1.3.5 - 2014-10-17
+/*! jqueryanimatesprite - v1.3.5 - 2019-07-23
+* forked version from https://github.com/KevBaister/jquery.animateSprite
 * http://blaiprat.github.io/jquery.animateSprite/
-* Copyright (c) 2014 blai Pratdesaba; Licensed MIT */
+* Copyright (c) 2019 blai Pratdesaba; Licensed MIT */
 (function ($, window, undefined) {
 
     'use strict';
@@ -34,6 +35,7 @@
                         columns: false,
                         fps: 12,
                         complete: function () {},
+                        onFrameActive: function() {},
                         loop: false,
                         autoplay: true
                     }, options),
@@ -133,6 +135,7 @@
                     row = Math.floor(frameNumber / data.settings.columns),
                     column = frameNumber % data.settings.columns;
 
+                data.settings.onFrameActive(frameNumber);
                 $this.css('background-position', (-data.settings.width * column) + 'px ' + (-data.settings.height * row) + 'px');
             }
         });
